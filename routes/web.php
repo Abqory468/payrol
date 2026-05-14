@@ -16,8 +16,8 @@ Route::view('profile', 'profile')
 
 //✅ Route ini HANYA bisa diakses jika sudah login
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('employee', 'livewire.employee.index')->name('employee.index');
-    Route::get('editkaryawan', \App\Livewire\Employee\EmployeeManager::class)->name('employee.edit');
+    Route::get('employee', \App\Livewire\Employee\EmployeeManager::class)->name('employee.index');
+    Route::get('/attendance', \App\Livewire\Attendance\AttendanceManager::class)->name('attendance.index');
     Route::get('/payroll', \App\Livewire\Calculator\PayrollCalculator::class)->name('payroll.calculator');
     Route::get('/payroll-history', \App\Livewire\Payrol\PayrollHistory::class)->name('payroll.history');
     Route::get('/cetak-slip/{id}', function ($id) {

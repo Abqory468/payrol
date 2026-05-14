@@ -33,21 +33,24 @@ new class extends Component
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <!-- Navigation Karyawan -->
-                    <x-nav-link :href="route('employee.index')" :active="request()->routeIs('employee.index')" wire:navigate>
-                        {{ __('Karyawan') }}
+                    <!-- Absensi: semua user -->
+                    <x-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index')" wire:navigate>
+                        {{ __('Absensi') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('employee.edit')" :active="request()->routeIs('employee.edit')" wire:navigate>
-                        {{ __('Kelola Karyawan') }}
-                    </x-nav-link>
-                    <!-- Navigation Kalkulator Penggajian -->
-                    <x-nav-link :href="route('payroll.calculator')" :active="request()->routeIs('payroll.calculator')" wire:navigate>
-                        {{ __('Kalkulator Penggajian') }}
-                    </x-nav-link>
-                    <!-- Navigation Riwayat Gaji -->
-                    <x-nav-link :href="route('payroll.history')" :active="request()->routeIs('payroll.history')" wire:navigate>
-                        {{ __('Riwayat Gaji') }}
-                    </x-nav-link>
+                    @if(Auth::user()->role === 'admin')
+                        <!-- Navigation Karyawan -->
+                        <x-nav-link :href="route('employee.index')" :active="request()->routeIs('employee.index')" wire:navigate>
+                            {{ __('Karyawan') }}
+                        </x-nav-link>
+                        <!-- Navigation Kalkulator Penggajian -->
+                        <x-nav-link :href="route('payroll.calculator')" :active="request()->routeIs('payroll.calculator')" wire:navigate>
+                            {{ __('Kalkulator Penggajian') }}
+                        </x-nav-link>
+                        <!-- Navigation Riwayat Gaji -->
+                        <x-nav-link :href="route('payroll.history')" :active="request()->routeIs('payroll.history')" wire:navigate>
+                            {{ __('Riwayat Gaji') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -98,6 +101,9 @@ new class extends Component
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('attendance.index')" :active="request()->routeIs('attendance.index')" wire:navigate>
+                {{ __('Absensi') }}
             </x-responsive-nav-link>
         </div>
 

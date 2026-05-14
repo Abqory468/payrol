@@ -11,6 +11,13 @@ class PayrollHistory extends Component
     use WithPagination;
     public string $filterPeriod = '';
 
+    public function mount()
+    {
+        if (\Illuminate\Support\Facades\Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized access.');
+        }
+    }
+
     // Reset ke halaman 1 setiap kali dropdown filter berubah   
     public function updatingFilterPeriod(): void
     {

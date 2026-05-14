@@ -20,6 +20,7 @@ class AdminSeeder extends Seeder
             [
                 'name'              => 'Admin Payroll',
                 'password'          => Hash::make('password'),
+                'role'              => 'admin',
                 'email_verified_at' => now(), // ← wajib! tanpa ini admin tidak bisa login jika verifikasi email aktif
             ]
         );

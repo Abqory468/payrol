@@ -22,18 +22,23 @@ class PayrollCalculator extends Component
 
     public function mount ()
     {
+        if (\Illuminate\Support\Facades\Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized access.');
+        }
+
         // Default bulan/tahun ke bulan ini (format Indonesia)
         $this->month_year = now()->locale('id')->isoFormat('MMMM YYYY');
 
     }
 
-    // Lifecycle Hook: hitung ulang THP setiap kali input angka berubah
     public function updated($field)
     {
-        if (in_array($field,['basic_salary','allowance','deduction'])) {
+        if (in_array($field,['basic_salary','allowance','deduction','employee_id'])) {
             $this->net_salary = max(0, (($this->basic_salary ?? 0) + ($this->allowance ?? 0)) - ($this->deduction ?? 0));
         }
     }
+
+    // calculateAlpa dihapus karena menyebabkan potongan otomatis
 
     public function savePayroll()
     {

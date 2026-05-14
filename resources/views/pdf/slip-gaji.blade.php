@@ -7,7 +7,7 @@
         /* Menggunakan CSS Klasik Standar */
         body { font-family: Arial, sans-serif; font-size: 14px; }
         .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
-        .title { font-size: 20px; font-weight: bold; }
+        .title { font-size: 20px; font-weight: bolder; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         td { padding: 8px; }
         .jumlah { text-align: right; font-weight: bold; }
@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="title">KODAKARSA CORPS</div>
+        <div class="title">Sistem Manajemen GajiYayasan Kodapsar</div>
         <div>SLIP GAJI KARYAWAN</div>
         <div>Periode: {{ $data->month_year }}</div>
     </div>
@@ -36,9 +36,9 @@
     <br><hr><br>
 
     <table border="1" cellpadding="8">
-        <tr>
-            <th align="left">Rincian Komponen</th>
-            <th align="right">Nominal</th>
+        <tr style="background-color: #093567ff; color: white;">
+            <th align="center">Rincian Komponen</th>
+            <th align="center">Nominal</th>
         </tr>
         <tr>
             <td>Gaji Pokok</td>
@@ -58,6 +58,6 @@
         </tr>
     </table>
 
-    <p style="text-align:right; margin-top:50px;">Manajer HRD<br><br><br>(_________________)</p>
+    <p style="text-align:right; margin-top:50px;">Bogor, {{ date('j F Y') }}<br><br><br><br>(_________________)<br><b style='font-size:14px;'><br>Ketua Yayasan</b></p>
 </body>
 </html>
