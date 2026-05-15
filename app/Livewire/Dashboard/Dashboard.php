@@ -9,6 +9,9 @@ use App\Models\Payroll;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+use Livewire\Attributes\Title;
+ 
+#[Title('Dashboard | Hisan Makmur')]
 class Dashboard extends Component
 {
     // const LATE_THRESHOLD is mapped to '08:30' directly in view or logic.

@@ -9,6 +9,9 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+use Livewire\Attributes\Title;
+
+#[Title('Kelola Absensi | Hisan Makmur')]
 class AttendanceManager extends Component
 {
     use WithPagination;

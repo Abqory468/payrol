@@ -6,6 +6,9 @@ use Livewire\Component;
 use App\Models\Payroll;
 use Livewire\WithPagination;
 
+use Livewire\Attributes\Title;
+
+#[Title('Riwayat Gaji | Hisan Makmur')]
 class PayrollHistory extends Component
 {
     use WithPagination;

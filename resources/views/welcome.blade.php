@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Hisan Makmur | Manajemen Payroll Modern</title>
+        <title>Beranda | Hisan Makmur</title>
+        <link rel="icon" href="{{ asset('logo2.png') }}" type="image/png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +56,7 @@
         <nav :class="scrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm border-b border-slate-100 py-3' : 'bg-transparent py-5'"
              class="fixed top-0 w-full z-50 transition-all duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center mt-5">
+                <div class="flex justify-between items-center mt-3">
                     <!-- Logo -->
                     <div class="flex items-center gap-2">
                         <img src="{{ asset('logo.png') }}" alt="HM Logo" class="h-10 w-auto">

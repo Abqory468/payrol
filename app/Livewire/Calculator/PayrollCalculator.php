@@ -7,6 +7,9 @@ use App\Models\Payroll;
 use App\Models\Employee;
 use Illuminate\Validation\Rule;
 
+use Livewire\Attributes\Title;
+
+#[Title('Kalkulator Gaji | Hisan Makmur')]
 class PayrollCalculator extends Component
 {   
     // Properti untuk menyimpan input dari form

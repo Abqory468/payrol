@@ -4,7 +4,9 @@ namespace App\Livewire\Employee;
 
 use Livewire\Component;
 use App\Models\Employee;
+use Livewire\Attributes\Title;
 
+#[Title('Kelola Karyawan | Hisan Makmur')]
 class EmployeeManager extends Component
 {
     // Menyimpan ID karyawan (null = mode tambah, ada nilai = mode edit)

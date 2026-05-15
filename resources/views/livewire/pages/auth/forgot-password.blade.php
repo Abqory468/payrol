@@ -2,9 +2,10 @@
 
 use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
+new #[Layout('layouts.guest')] #[Title('Lupa Password | Hisan Makmur')] class extends Component
 {
     public string $email = '';
 
