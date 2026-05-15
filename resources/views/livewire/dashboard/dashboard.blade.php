@@ -89,26 +89,109 @@
                     </div>
                 </div>
 
-                @php
-                    $maxChart = collect($chartData)->max('total') ?: 1;
-                @endphp
-
-                <div class="flex items-end gap-4 h-52">
-                    @foreach($chartData as $bar)
-                        @php $heightPct = $maxChart > 0 ? round(($bar['total'] / $maxChart) * 100) : 0; @endphp
-                        <div class="flex-1 flex flex-col items-center gap-2 relative group">
-                            <!-- Tooltip -->
-                            <div class="absolute -top-10 bg-slate-800 text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
-                                Rp {{ number_format($bar['total'], 0, ',', '.') }}
-                            </div>
-                            
-                            <div class="w-full rounded-t-xl transition-all duration-300 {{ $heightPct > 70 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-100 hover:bg-blue-200' }}"
-                                 style="height: {{ max($heightPct, 4) }}%"></div>
-                            <span class="text-xs font-medium text-slate-500">{{ $bar['label'] }}</span>
-                        </div>
-                    @endforeach
+                <div class="relative h-64 w-full">
+                    <canvas id="payrollChart"></canvas>
                 </div>
             </div>
+
+            {{-- Script for Chart.js --}}
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                document.addEventListener('livewire:navigated', () => {
+                    initPayrollChart();
+                });
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    initPayrollChart();
+                });
+
+                function initPayrollChart() {
+                    const ctx = document.getElementById('payrollChart');
+                    if (!ctx) return;
+
+                    // Clean up existing chart if any
+                    const existingChart = Chart.getChart(ctx);
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
+
+                    const labels = @json(collect($chartData)->pluck('label'));
+                    const dataValues = @json(collect($chartData)->pluck('total'));
+
+                    const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+                    gradient.addColorStop(0, 'rgba(37, 99, 235, 0.2)');
+                    gradient.addColorStop(1, 'rgba(37, 99, 235, 0)');
+
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Total Gaji',
+                                data: dataValues,
+                                borderColor: '#2563eb',
+                                borderWidth: 3,
+                                backgroundColor: gradient,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#fff',
+                                pointBorderColor: '#2563eb',
+                                pointBorderWidth: 2,
+                                pointRadius: 4,
+                                pointHoverRadius: 6
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    backgroundColor: '#1e293b',
+                                    titleFont: { size: 12, weight: 'bold' },
+                                    bodyFont: { size: 12 },
+                                    padding: 12,
+                                    displayColors: false,
+                                    callbacks: {
+                                        label: function(context) {
+                                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(context.raw);
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        display: true,
+                                        color: '#f1f5f9',
+                                        drawBorder: false
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            if (value >= 1000000) return 'Rp ' + (value/1000000).toFixed(1) + 'M';
+                                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(value);
+                                        },
+                                        color: '#94a3b8',
+                                        font: { size: 11 }
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        color: '#94a3b8',
+                                        font: { size: 11 }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            </script>
 
             {{-- Notifikasi --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
