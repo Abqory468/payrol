@@ -14,28 +14,33 @@ class AttendanceManager extends Component
     use WithPagination;
 
     // ── State karyawan yang sedang login ──
-    public ?Employee $myEmployee = null;
+    public ?Employee $myEmployee   = null;
     public ?Attendance $todayRecord = null;
 
-    // ── Filter (admin) ──
+    // ── Pilihan check-in (user memilih hadir atau sakit) ──
+    public string $checkInType = 'hadir'; // 'hadir' | 'sakit'
+
+    // ── Jam batas keterlambatan ──
+    const LATE_THRESHOLD = '08:30';
+
+    // ── Filter ──
     public string $filterDate   = '';
     public string $filterStatus = '';
 
     // ── Form manual (admin) ──
-    public bool   $showForm     = false;
-    public ?int   $editId       = null;
+    public bool   $showForm         = false;
+    public ?int   $editId           = null;
     public string $form_employee_id = '';
-    public string $form_date    = '';
-    public string $form_status  = 'hadir';
-    public string $form_check_in  = '';
-    public string $form_check_out = '';
-    public string $form_notes   = '';
+    public string $form_date        = '';
+    public string $form_status      = 'hadir';
+    public string $form_check_in    = '';
+    public string $form_check_out   = '';
+    public string $form_notes       = '';
 
     public function mount(): void
     {
         $user = Auth::user();
 
-        // Jika karyawan biasa, cari profil employee-nya
         if ($user->role !== 'admin') {
             $this->myEmployee  = Employee::where('user_id', $user->id)->first();
             $this->todayRecord = $this->myEmployee
@@ -55,17 +60,42 @@ class AttendanceManager extends Component
     {
         if (! $this->myEmployee) return;
 
-        $record = Attendance::firstOrCreate(
-            ['employee_id' => $this->myEmployee->id, 'date' => today()->toDateString()],
-            ['status' => 'hadir']
-        );
+        // Jika sudah check-in hari ini, tidak perlu lagi
+        if ($this->todayRecord?->check_in) return;
 
-        if (! $record->check_in) {
-            $record->update(['check_in' => now()->format('H:i:s'), 'status' => 'hadir']);
+        $now    = now();
+        $nowStr = $now->format('H:i:s');
+
+        // Tentukan status: sakit tidak dianggap telat, hadir dicek jam-nya
+        if ($this->checkInType === 'sakit') {
+            $status = 'sakit';
+        } else {
+            // Bandingkan waktu sekarang dengan batas 08:30
+            $threshold = Carbon::createFromTimeString(self::LATE_THRESHOLD . ':00');
+            $status    = $now->gt($threshold) ? 'telat' : 'hadir';
         }
 
+        $record = Attendance::updateOrCreate(
+            ['employee_id' => $this->myEmployee->id, 'date' => today()->toDateString()],
+            [
+                'status'   => $status,
+                'check_in' => $nowStr,
+                'notes'    => $status === 'telat'
+                    ? 'Check-in setelah pukul ' . self::LATE_THRESHOLD
+                    : null,
+            ]
+        );
+
         $this->todayRecord = $record->fresh();
-        session()->flash('success', 'Check-in berhasil! Selamat bekerja 💪');
+
+        $msg = match($status) {
+            'hadir' => 'Check-in berhasil! Selamat bekerja 💪',
+            'telat'  => 'Check-in tercatat, namun Anda terlambat (lewat ' . self::LATE_THRESHOLD . ') ⚠️',
+            'sakit'  => 'Check-in sakit berhasil dicatat. Semoga lekas sembuh 🙏',
+            default  => 'Check-in berhasil!',
+        };
+
+        session()->flash('success', $msg);
     }
 
     // ════════════════════════════════════════
@@ -74,13 +104,12 @@ class AttendanceManager extends Component
     public function checkOut(): void
     {
         if (! $this->myEmployee || ! $this->todayRecord) return;
+        if ($this->todayRecord->check_out) return;
 
-        if (! $this->todayRecord->check_out) {
-            $this->todayRecord->update(['check_out' => now()->format('H:i:s')]);
-        }
-
+        $this->todayRecord->update(['check_out' => now()->format('H:i:s')]);
         $this->todayRecord = $this->todayRecord->fresh();
-        session()->flash('success', 'Check-out berhasil! Sampai jumpa besok 👋');
+
+        session()->flash('success', 'Check-out berhasil! Durasi: ' . $this->todayRecord->duration_formatted . ' 👋');
     }
 
     // ════════════════════════════════════════
@@ -93,7 +122,7 @@ class AttendanceManager extends Component
 
         if ($id) {
             $att = Attendance::findOrFail($id);
-            $this->form_employee_id = $att->employee_id;
+            $this->form_employee_id = (string) $att->employee_id;
             $this->form_date        = $att->date->toDateString();
             $this->form_status      = $att->status;
             $this->form_check_in    = $att->check_in  ?? '';
@@ -125,7 +154,7 @@ class AttendanceManager extends Component
         $this->validate([
             'form_employee_id' => 'required|exists:employees,id',
             'form_date'        => 'required|date',
-            'form_status'      => 'required|in:hadir,sakit,izin,alpa',
+            'form_status'      => 'required|in:hadir,telat,sakit,izin,alpa',
             'form_check_in'    => 'nullable|date_format:H:i',
             'form_check_out'   => 'nullable|date_format:H:i|after:form_check_in',
         ], [
@@ -168,9 +197,11 @@ class AttendanceManager extends Component
         $user      = Auth::user();
         $employees = Employee::orderBy('name')->get();
 
-        $query = Attendance::with('employee')->orderBy('date', 'desc')->orderBy('id', 'desc');
+        $query = Attendance::with('employee')
+            ->orderBy('date', 'desc')
+            ->orderBy('id', 'desc');
 
-        // Karyawan biasa: hanya lihat milik sendiri
+        // Karyawan biasa: hanya tampilkan milik sendiri
         if ($user->role !== 'admin' && $this->myEmployee) {
             $query->where('employee_id', $this->myEmployee->id);
         }
@@ -183,8 +214,9 @@ class AttendanceManager extends Component
         }
 
         return view('livewire.attendance.attendance-manager', [
-            'attendances' => $query->paginate(15),
-            'employees'   => $employees,
+            'attendances'    => $query->paginate(15),
+            'employees'      => $employees,
+            'lateThreshold'  => self::LATE_THRESHOLD,
         ])->layout('layouts.app');
     }
 }

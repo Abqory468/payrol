@@ -1,9 +1,9 @@
-<div class="min-h-screen bg-slate-50">
+<div class="min-h-screen bg-slate-50/50">
 
     @if (session()->has('success'))
-        <div class="mx-6 mt-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            {{ session('success') }}
+        <div class="mx-6 mt-4 bg-emerald-50 border border-emerald-100 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-2 shadow-sm animate-fade-in-down">
+            <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span class="text-sm font-medium">{{ session('success') }}</span>
         </div>
     @endif
 
@@ -12,15 +12,19 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
         {{-- ① WELCOME BANNER --}}
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between shadow-lg">
-            <div>
-                <h1 class="text-2xl font-bold text-white">Selamat Datang Kembali, {{ Auth::user()->name }} 👋</h1>
-                <p class="text-blue-100 text-sm mt-1">Kelola penggajian, kehadiran, dan karyawan Anda - semuanya di satu tempat.</p>
-                <p class="text-blue-200 text-xs mt-1">Periode aktif: <span class="font-semibold text-white">{{ $periodeBulanIni }}</span></p>
+        <div class="bg-blue-600 rounded-2xl p-8 flex flex-col md:flex-row md:items-center md:justify-between shadow-lg shadow-blue-600/10 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+            <div class="relative z-10">
+                <p class="text-blue-100 font-medium mb-1">Halo, Selamat Datang 👋</p>
+                <h1 class="text-3xl font-bold text-white tracking-tight">{{ Auth::user()->name }}</h1>
+                <p class="text-blue-100 text-sm mt-2 flex items-center gap-2">
+                    <span class="bg-blue-500/50 px-2.5 py-1 rounded-md text-xs font-semibold backdrop-blur-sm border border-blue-400/30">Periode Aktif</span>
+                    <span>{{ $periodeBulanIni }}</span>
+                </p>
             </div>
-            <div class="mt-4 md:mt-0 text-right">
-                <p id="live-date" class="text-white font-semibold text-lg"></p>
-                <p id="live-time" class="text-blue-200 text-sm font-mono"></p>
+            <div class="relative z-10 mt-6 md:mt-0 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10 text-center min-w-[200px]">
+                <p id="live-date" class="text-blue-50 font-medium text-sm mb-1"></p>
+                <p id="live-time" class="text-2xl font-bold text-white tracking-wider font-mono"></p>
             </div>
         </div>
 
@@ -29,49 +33,45 @@
 
             {{-- Total Karyawan --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87m6-3.87a4 4 0 10-8 0 4 4 0 008 0z"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                    <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87m6-3.87a4 4 0 10-8 0 4 4 0 008 0z"/></svg>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wide">Total Karyawan</p>
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Total Karyawan</p>
                     <p class="text-2xl font-bold text-slate-800">{{ $totalKaryawan }}</p>
-                    <p class="text-xs text-blue-500 mt-0.5">Terdaftar di sistem</p>
                 </div>
             </div>
 
             {{-- Total Payroll --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wide">Total Payroll Bulan Ini</p>
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Total Payroll</p>
                     <p class="text-xl font-bold text-slate-800">Rp {{ number_format($totalGaji, 0, ',', '.') }}</p>
-                    <p class="text-xs text-emerald-500 mt-0.5">{{ $periodeBulanIni }}</p>
                 </div>
             </div>
 
             {{-- Hadir Hari Ini --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wide">Hadir Hari Ini</p>
-                    <p class="text-2xl font-bold text-slate-800">{{ $hadirHariIni }}</p>
-                    <p class="text-xs text-green-500 mt-0.5">Dari {{ $totalKaryawan }} karyawan</p>
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Hadir Hari Ini</p>
+                    <p class="text-2xl font-bold text-slate-800">{{ $hadirHariIni }} <span class="text-xs font-medium text-slate-400 normal-case">/ {{ $totalKaryawan }}</span></p>
                 </div>
             </div>
 
             {{-- Slip Gaji Diterbitkan --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center gap-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 border border-indigo-100">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
                 <div>
-                    <p class="text-xs text-slate-400 font-medium uppercase tracking-wide">Slip Diterbitkan</p>
+                    <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Slip Terbit</p>
                     <p class="text-2xl font-bold text-slate-800">{{ $totalPayslips }}</p>
-                    <p class="text-xs text-purple-500 mt-0.5">Bulan ini</p>
                 </div>
             </div>
 
@@ -82,77 +82,84 @@
 
             {{-- Payroll Chart (6 bulan terakhir) --}}
             <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h2 class="text-base font-bold text-slate-800">Pengeluaran Payroll 6 Bulan Terakhir</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Data real dari database</p>
+                        <h2 class="text-base font-bold text-slate-800">Tren Pengeluaran Payroll</h2>
+                        <p class="text-sm text-slate-500 mt-0.5">6 Bulan Terakhir</p>
                     </div>
-                    <span class="bg-blue-50 text-blue-600 text-xs font-semibold px-3 py-1 rounded-full">Real Data</span>
                 </div>
 
                 @php
                     $maxChart = collect($chartData)->max('total') ?: 1;
                 @endphp
 
-                <div class="flex items-end gap-3 h-44">
+                <div class="flex items-end gap-4 h-52">
                     @foreach($chartData as $bar)
                         @php $heightPct = $maxChart > 0 ? round(($bar['total'] / $maxChart) * 100) : 0; @endphp
-                        <div class="flex-1 flex flex-col items-center gap-1">
-                            <span class="text-[10px] text-slate-500 font-medium leading-tight text-center">
-                                @if($bar['total'] > 0) Rp{{ number_format($bar['total']/1000000, 1) }}jt @else — @endif
-                            </span>
-                            <div class="w-full rounded-t-lg transition-all duration-500 hover:opacity-80 {{ $heightPct > 70 ? 'bg-blue-600' : 'bg-blue-200' }}"
+                        <div class="flex-1 flex flex-col items-center gap-2 relative group">
+                            <!-- Tooltip -->
+                            <div class="absolute -top-10 bg-slate-800 text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                                Rp {{ number_format($bar['total'], 0, ',', '.') }}
+                            </div>
+                            
+                            <div class="w-full rounded-t-xl transition-all duration-300 {{ $heightPct > 70 ? 'bg-blue-500 hover:bg-blue-600' : 'bg-blue-100 hover:bg-blue-200' }}"
                                  style="height: {{ max($heightPct, 4) }}%"></div>
-                            <span class="text-xs text-slate-500">{{ $bar['label'] }}</span>
+                            <span class="text-xs font-medium text-slate-500">{{ $bar['label'] }}</span>
                         </div>
                     @endforeach
-                </div>
-
-                <div class="mt-4 flex items-center gap-4 text-xs text-slate-400">
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-600 rounded-sm inline-block"></span> Tertinggi</span>
-                    <span class="flex items-center gap-1"><span class="w-3 h-3 bg-blue-200 rounded-sm inline-block"></span> Normal</span>
                 </div>
             </div>
 
             {{-- Notifikasi --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
-                <h2 class="text-base font-bold text-slate-800 mb-4">🔔 Notifikasi Sistem</h2>
+                <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    Pusat Informasi
+                </h2>
                 <div class="space-y-3 flex-1">
 
                     {{-- Belum absen --}}
                     @if($belumAbsen > 0)
-                        <div class="flex items-start gap-3 p-3 bg-red-50 rounded-xl">
-                            <span class="w-2 h-2 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+                        <div class="flex items-start gap-3 p-3.5 bg-rose-50 border border-rose-100 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-white text-rose-500 flex items-center justify-center shrink-0 shadow-sm border border-rose-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
                             <div>
-                                <p class="text-sm font-semibold text-slate-700">{{ $belumAbsen }} karyawan belum absen hari ini</p>
-                                <p class="text-xs text-slate-400 mt-0.5">{{ now()->format('d M Y') }}</p>
+                                <p class="text-sm font-semibold text-slate-800">{{ $belumAbsen }} karyawan belum absen</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Batas waktu hari ini</p>
                             </div>
                         </div>
                     @else
-                        <div class="flex items-start gap-3 p-3 bg-green-50 rounded-xl">
-                            <span class="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0"></span>
+                        <div class="flex items-start gap-3 p-3.5 bg-emerald-50 border border-emerald-100 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-white text-emerald-500 flex items-center justify-center shrink-0 shadow-sm border border-emerald-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
                             <div>
-                                <p class="text-sm font-semibold text-slate-700">Semua karyawan sudah absen hari ini 🎉</p>
-                                <p class="text-xs text-slate-400 mt-0.5">{{ now()->format('d M Y') }}</p>
+                                <p class="text-sm font-semibold text-slate-800">Semua absen lengkap</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Kehadiran 100%</p>
                             </div>
                         </div>
                     @endif
 
                     {{-- Slip gaji bulan ini --}}
                     @if($totalPayslips > 0)
-                        <div class="flex items-start gap-3 p-3 bg-emerald-50 rounded-xl">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
+                        <div class="flex items-start gap-3 p-3.5 bg-blue-50 border border-blue-100 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-white text-blue-500 flex items-center justify-center shrink-0 shadow-sm border border-blue-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
                             <div>
-                                <p class="text-sm font-semibold text-slate-700">{{ $totalPayslips }} slip gaji diterbitkan bulan ini</p>
-                                <p class="text-xs text-slate-400 mt-0.5">{{ $periodeBulanIni }}</p>
+                                <p class="text-sm font-semibold text-slate-800">{{ $totalPayslips }} Slip Terbit</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Bulan {{ $periodeBulanIni }}</p>
                             </div>
                         </div>
                     @else
-                        <div class="flex items-start gap-3 p-3 bg-yellow-50 rounded-xl">
-                            <span class="w-2 h-2 rounded-full bg-yellow-400 mt-1.5 shrink-0"></span>
+                        <div class="flex items-start gap-3 p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-white text-slate-400 flex items-center justify-center shrink-0 shadow-sm border border-slate-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
                             <div>
-                                <p class="text-sm font-semibold text-slate-700">Belum ada slip gaji bulan ini</p>
-                                <p class="text-xs text-slate-400 mt-0.5">Proses payroll sekarang</p>
+                                <p class="text-sm font-semibold text-slate-800">Payroll Belum Diproses</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Untuk bulan ini</p>
                             </div>
                         </div>
                     @endif
@@ -162,11 +169,13 @@
                         $noEmployee = \App\Models\User::where('role','user')->whereDoesntHave('employee')->count();
                     @endphp
                     @if($noEmployee > 0)
-                        <div class="flex items-start gap-3 p-3 bg-orange-50 rounded-xl">
-                            <span class="w-2 h-2 rounded-full bg-orange-400 mt-1.5 shrink-0"></span>
+                        <div class="flex items-start gap-3 p-3.5 bg-orange-50 border border-orange-100 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-white text-orange-500 flex items-center justify-center shrink-0 shadow-sm border border-orange-100">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                            </div>
                             <div>
-                                <p class="text-sm font-semibold text-slate-700">{{ $noEmployee }} akun belum dihubungkan ke data karyawan</p>
-                                <p class="text-xs text-slate-400 mt-0.5">Segera lengkapi di halaman Karyawan</p>
+                                <p class="text-sm font-semibold text-slate-800">{{ $noEmployee }} Akun Menganggur</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Belum ditautkan ke data karyawan</p>
                             </div>
                         </div>
                     @endif
@@ -179,47 +188,53 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
             {{-- Attendance Table --}}
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <div class="flex items-center justify-between mb-5">
-                    <h2 class="text-base font-bold text-slate-800">Absensi Hari Ini</h2>
-                    <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">{{ now()->format('d M Y') }}</span>
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h2 class="text-base font-bold text-slate-800">Log Kehadiran Hari Ini</h2>
+                    <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ now()->format('d M Y') }}</span>
                 </div>
 
                 @if($attendanceHariIni->count() > 0)
                 <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                    <table class="w-full text-sm text-left">
                         <thead>
-                            <tr class="text-xs text-slate-400 uppercase tracking-wide border-b border-slate-100">
-                                <th class="pb-3 text-left font-semibold">Nama Karyawan</th>
-                                <th class="pb-3 text-left font-semibold">Jabatan</th>
-                                <th class="pb-3 text-left font-semibold">Status</th>
+                            <tr class="text-xs text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                                <th class="px-6 py-4 font-semibold">Karyawan</th>
+                                <th class="px-6 py-4 font-semibold text-center">Status</th>
+                                <th class="px-6 py-4 font-semibold text-center">Jam Masuk</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
+                        <tbody class="divide-y divide-slate-100">
                             @foreach($attendanceHariIni as $att)
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="py-3 font-medium text-slate-700">
-                                        {{ $att->employee->name ?? '—' }}
+                                <tr class="hover:bg-slate-50/80 transition-colors">
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center text-xs">
+                                                {{ strtoupper(substr($att->employee->name ?? '?', 0, 1)) }}
+                                            </div>
+                                            <div>
+                                                <p class="font-semibold text-slate-800">{{ $att->employee->name ?? '—' }}</p>
+                                                <p class="text-xs text-slate-500">{{ $att->employee->position ?? '—' }}</p>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="py-3 text-slate-500 text-xs">{{ $att->employee->position ?? '—' }}</td>
-                                    <td class="py-3">
+                                    <td class="px-6 py-4 text-center">
                                         @php
-                                            $statusColor = match($att->status) {
-                                                'hadir'  => 'bg-green-100 text-green-700',
-                                                'sakit'  => 'bg-yellow-100 text-yellow-700',
-                                                'izin'   => 'bg-blue-100 text-blue-700',
-                                                default  => 'bg-slate-100 text-slate-600',
-                                            };
-                                            $statusLabel = match($att->status) {
-                                                'hadir'  => '✅ Hadir',
-                                                'sakit'  => '🤒 Sakit',
-                                                'izin'   => '📋 Izin',
-                                                default  => ucfirst($att->status),
-                                            };
+                                            $statusConfig = [
+                                                'hadir'  => ['Hadir', 'bg-emerald-50 text-emerald-600 border-emerald-200'],
+                                                'telat'  => ['Telat', 'bg-orange-50 text-orange-600 border-orange-200'],
+                                                'sakit'  => ['Sakit', 'bg-amber-50 text-amber-600 border-amber-200'],
+                                                'izin'   => ['Izin',  'bg-blue-50 text-blue-600 border-blue-200'],
+                                                'alpa'   => ['Alpa',  'bg-rose-50 text-rose-600 border-rose-200'],
+                                            ];
+                                            [$sLabel, $sCls] = $statusConfig[$att->status] ?? [ucfirst($att->status), 'bg-slate-100 text-slate-600 border-slate-200'];
                                         @endphp
-                                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
-                                            {{ $statusLabel }}
+                                        <span class="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold border {{ $sCls }}">
+                                            {{ $sLabel }}
                                         </span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-mono text-slate-600">
+                                        {{ $att->check_in ? \Carbon\Carbon::createFromTimeString($att->check_in)->format('H:i') : '—' }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -227,67 +242,72 @@
                     </table>
                 </div>
                 @else
-                    <div class="flex flex-col items-center justify-center py-12 text-slate-400">
-                        <svg class="w-12 h-12 mb-3 opacity-30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
-                        <p class="text-sm font-medium">Belum ada data absensi hari ini</p>
+                    <div class="flex flex-col items-center justify-center py-16 text-slate-400">
+                        <svg class="w-12 h-12 mb-4 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                        <p class="text-sm font-medium text-slate-500">Belum ada aktivitas kehadiran hari ini</p>
                     </div>
                 @endif
+            </div>
 
-                {{-- Payslip terbaru bulan ini --}}
+            {{-- Quick Actions --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 flex flex-col">
+                <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Akses Cepat
+                </h2>
+                
+                <div class="grid grid-cols-1 gap-3 mb-6">
+                    <a href="{{ route('attendance.index') }}" wire:navigate
+                       class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Absensi</p>
+                            <p class="text-xs text-slate-500">Urus Absensi Karyawan</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('payroll.calculator') }}" wire:navigate
+                       class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Proses Payroll</p>
+                            <p class="text-xs text-slate-500">Hitung & terbitkan slip gaji</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('employee.index') }}" wire:navigate
+                       class="group flex items-center gap-4 p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Kelola Karyawan</p>
+                            <p class="text-xs text-slate-500">Tambah data pegawai baru</p>
+                        </div>
+                    </a>
+                </div>
+
+                {{-- Payslip terbaru --}}
                 @if($payslipsTerbaru->count() > 0)
-                <div class="mt-6 pt-5 border-t border-slate-100">
-                    <h3 class="text-sm font-bold text-slate-700 mb-3">Slip Gaji Terbaru — {{ $periodeBulanIni }}</h3>
+                <div class="mt-auto pt-5 border-t border-slate-100">
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Slip Terbaru</p>
                     <div class="space-y-2">
-                        @foreach($payslipsTerbaru as $ps)
-                        <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-2.5">
-                            <div>
-                                <p class="text-sm font-semibold text-slate-700">{{ $ps->employee->name ?? '—' }}</p>
-                                <p class="text-xs text-slate-400">{{ $ps->employee->position ?? '' }}</p>
+                        @foreach($payslipsTerbaru->take(3) as $ps)
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                                <span class="text-slate-600 font-medium">{{ $ps->employee->name ?? '—' }}</span>
                             </div>
-                            <div class="text-right">
-                                <p class="text-sm font-bold text-emerald-600">Rp {{ number_format($ps->net_salary, 0, ',', '.') }}</p>
-                                <a href="{{ route('payroll.cetak', $ps->id) }}" target="_blank" class="text-xs text-blue-500 hover:underline">Lihat PDF</a>
-                            </div>
+                            <span class="font-bold text-slate-800">Rp {{ number_format($ps->net_salary, 0, ',', '.') }}</span>
                         </div>
                         @endforeach
                     </div>
                 </div>
                 @endif
-            </div>
-
-            {{-- Quick Actions --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
-                <h2 class="text-base font-bold text-slate-800 mb-5">⚡ Aksi Cepat</h2>
-                <div class="flex flex-col gap-3">
-                    <a href="{{ route('employee.index') }}" wire:navigate
-                       class="flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-3 rounded-xl transition-all hover:shadow-md">
-                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                        Tambah Karyawan
-                    </a>
-                    <a href="{{ route('payroll.calculator') }}" wire:navigate
-                       class="flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-4 py-3 rounded-xl transition-all hover:shadow-md">
-                        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                        Proses Payroll
-                    </a>
-
-                    {{-- Ringkasan Absen bulan ini --}}
-                    <div class="mt-2 pt-4 border-t border-slate-100">
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Absensi Bulan Ini</p>
-                        @php
-                            $thisM = date('m');
-                            $thisY = date('Y');
-                            $totalHadir = \App\Models\Attendance::whereMonth('date',$thisM)->whereYear('date',$thisY)->where('status','hadir')->count();
-                        @endphp
-                        <div class="flex items-center justify-between bg-green-50 rounded-xl px-4 py-3">
-                            <span class="text-sm text-green-700 font-medium">Total Hadir</span>
-                            <span class="text-lg font-bold text-green-700">{{ $totalHadir }}</span>
-                        </div>
-                        <div class="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 mt-2">
-                            <span class="text-sm text-slate-600 font-medium">Belum Absen Hari Ini</span>
-                            <span class="text-lg font-bold {{ $belumAbsen > 0 ? 'text-red-500' : 'text-green-600' }}">{{ $belumAbsen }}</span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -295,58 +315,176 @@
 
     {{-- ══════════════════ USER VIEW ══════════════════ --}}
     @else
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            {{-- Profil & Absensi --}}
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Profil Saya</h3>
+    <div class="max-w-88xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        {{-- Banner Welcome User --}}
+        <div class="bg-white rounded-3xl p-8 flex flex-col md:flex-row md:items-center md:justify-between shadow-sm border border-slate-200 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-blue-50 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <p class="text-slate-500 font-medium mb-1">Halo, Selamat Datang 👋</p>
+                <h1 class="text-3xl font-bold text-slate-800 tracking-tight">{{ Auth::user()->name }}</h1>
                 @if($employee)
-                    <p class="text-gray-600"><strong>Nama:</strong> {{ $employee->name }}</p>
-                    <p class="text-gray-600"><strong>NIK:</strong> {{ $employee->nik }}</p>
-                    <p class="text-gray-600"><strong>Jabatan:</strong> {{ $employee->position }}</p>
-                    @if($employee->ttl)
-                        <p class="text-gray-600"><strong>TTL:</strong> {{ $employee->ttl }}</p>
-                    @endif
-                    <div class="mt-6">
-                        @if($sudahAbsen)
-                            <div class="bg-green-100 text-green-800 p-3 rounded-xl text-center font-bold">
-                                ✅ Anda sudah absen hadir hari ini!
+                    <p class="mt-3 flex items-center gap-3">
+                        <span class="bg-blue-50 text-blue-700 border border-blue-100 px-3 py-1 rounded-lg text-xs font-bold">{{ $employee->position }}</span>
+                        <span class="text-sm text-slate-500 font-medium">NIK: {{ $employee->nik }}</span>
+                    </p>
+                @endif
+            </div>
+            
+            <div class="relative z-10 mt-6 md:mt-0 text-right min-w-[200px]">
+                <p id="live-date" class="text-slate-500 font-medium text-sm mb-1"></p>
+                <p id="live-time" class="text-3xl font-bold text-blue-600 tracking-wider font-mono"></p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {{-- Kolom Kiri: Status Hari Ini & Aksi --}}
+            <div class="space-y-8">
+                
+                {{-- Status Absensi Widget --}}
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden relative">
+                    <div class="p-6">
+                        <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Status Hari Ini
+                        </h2>
+                        
+                        @if($employee)
+                            <div class="space-y-5">
+                                @if($sudahAbsen)
+                                    @php
+                                        // Cek detail kehadiran hari ini
+                                        $todayRecord = \App\Models\Attendance::where('employee_id', $employee->id)->where('date', date('Y-m-d'))->first();
+                                    @endphp
+                                    
+                                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            @if($todayRecord && $todayRecord->status === 'telat')
+                                                <div class="w-12 h-12 rounded-xl bg-orange-50 border border-orange-100 text-orange-500 flex items-center justify-center shrink-0">
+                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-bold text-slate-800">Tercatat Telat</p>
+                                                    <p class="text-xs font-medium text-slate-500 mt-0.5">{{ \Carbon\Carbon::createFromTimeString($todayRecord->check_in)->format('H:i') }} WIB</p>
+                                                </div>
+                                            @elseif($todayRecord && $todayRecord->status === 'sakit')
+                                                <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 text-amber-500 flex items-center justify-center shrink-0">
+                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-bold text-slate-800">Tercatat Sakit</p>
+                                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Semoga lekas sembuh</p>
+                                                </div>
+                                            @else
+                                                <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-500 flex items-center justify-center shrink-0">
+                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-bold text-slate-800">Hadir Tepat Waktu</p>
+                                                    <p class="text-xs font-medium text-slate-500 mt-0.5">{{ $todayRecord && $todayRecord->check_in ? \Carbon\Carbon::createFromTimeString($todayRecord->check_in)->format('H:i') . ' WIB' : 'Tercatat' }}</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4">
+                                        <div class="flex items-start gap-3">
+                                            <svg class="w-5 h-5 text-blue-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                            <div>
+                                                <p class="text-sm font-semibold text-blue-800 leading-tight">Kehadiran tercatat!</p>
+                                                <p class="text-xs text-blue-600/80 mt-1">Jangan lupa melakukan Check-out saat selesai bekerja.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center">
+                                        <div class="w-14 h-14 bg-white border border-slate-200 rounded-xl flex items-center justify-center mb-4">
+                                            <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                        </div>
+                                        <p class="text-base font-bold text-slate-800">Belum Check-in</p>
+                                        <p class="text-xs text-slate-500 mt-1 mb-5">Batas waktu check-in adalah pukul 08:30 WIB.</p>
+                                        
+                                        <a href="{{ route('attendance.index') }}" wire:navigate class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                                            <span>Lakukan Check-in</span>
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                        </a>
+                                    </div>
+                                @endif
+                                
+                                <div class="pt-2">
+                                    <a href="{{ route('attendance.index') }}" wire:navigate class="w-full flex items-center justify-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold py-3 px-4 rounded-xl transition-colors group">
+                                        <svg class="w-5 h-5 text-slate-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        Lihat Menu Absensi
+                                    </a>
+                                </div>
                             </div>
                         @else
-                            <button wire:click="absenMasuk" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow transition-colors">
-                                👆 Klik Untuk Absen Masuk Hari Ini
-                            </button>
-                            <p class="text-xs text-red-500 mt-2">*Perhatian: Jika tidak absen, maka akan dihitung Alpa dan memotong gaji bulanan Anda.</p>
+                            <div class="bg-amber-50 border border-amber-200 p-5 rounded-2xl flex flex-col items-center text-center">
+                                <svg class="w-10 h-10 text-amber-500 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <p class="text-sm font-bold text-amber-800">Profil Belum Terhubung</p>
+                                <p class="text-xs text-amber-700 mt-1">Akun ini belum tertaut dengan data karyawan. Silakan hubungi Administrator HR.</p>
+                            </div>
                         @endif
                     </div>
-                @else
-                    <p class="text-red-500">Data karyawan belum dihubungkan. Silakan hubungi Admin.</p>
-                @endif
+                </div>
+
             </div>
 
-            {{-- Slip Gaji --}}
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">Slip Gaji Saya</h3>
-                @if($employee && count($payrolls) > 0)
-                    <div class="flex flex-col gap-3">
-                        @foreach($payrolls as $pr)
-                            <div class="flex justify-between items-center border-b pb-2">
-                                <div>
-                                    <p class="font-bold text-gray-800">{{ $pr->month_year }}</p>
-                                    <p class="text-sm text-gray-500">Rp {{ number_format($pr->net_salary, 0, ',', '.') }}</p>
-                                </div>
-                                <a href="{{ route('payroll.cetak', $pr->id) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm border border-blue-600 rounded-lg px-3 py-1">
-                                    Unduh PDF
-                                </a>
-                            </div>
-                        @endforeach
+            {{-- Kolom Kanan: Payslips --}}
+            <div class="lg:col-span-2 space-y-8">
+                
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 h-full flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Slip Gaji Terakhir
+                        </h3>
+                        <span class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full border border-slate-200">{{ count($payrolls) }} Dokumen</span>
                     </div>
-                @else
-                    <p class="text-gray-500 text-sm">Belum ada slip gaji.</p>
-                @endif
-            </div>
 
+                    @if($employee && count($payrolls) > 0)
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach($payrolls as $index => $pr)
+                                <div class="group relative bg-white border border-slate-200 hover:border-blue-300 rounded-2xl p-5 transition-all hover:shadow-md flex flex-col justify-between {{ $index === 0 ? 'md:col-span-2 bg-blue-50/30' : '' }}">
+                                    
+                                    @if($index === 0)
+                                        <div class="absolute top-0 right-0 bg-blue-100 text-blue-700 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-bl-xl rounded-tr-xl border-b border-l border-blue-200">Terbaru</div>
+                                    @endif
+
+                                    <div class="flex items-start gap-4 mb-4">
+                                        <div class="w-12 h-12 rounded-xl {{ $index === 0 ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500' }} flex items-center justify-center shrink-0">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-slate-800 {{ $index === 0 ? 'text-lg' : '' }}">{{ $pr->month_year }}</p>
+                                            <p class="text-sm text-slate-500 mt-1">Take Home Pay</p>
+                                            <p class="font-extrabold text-slate-800 {{ $index === 0 ? 'text-2xl mt-1 text-blue-600' : 'text-lg mt-0.5' }}">Rp {{ number_format($pr->net_salary, 0, ',', '.') }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="pt-4 border-t border-slate-100">
+                                        <a href="{{ route('payroll.cetak', $pr->id) }}" target="_blank" class="flex items-center justify-center gap-2 w-full {{ $index === 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-transparent' : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200' }} border font-medium py-2.5 px-4 rounded-xl transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                                            Unduh Slip Gaji PDF
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="flex-1 flex flex-col items-center justify-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                            <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 mb-4">
+                                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+                            </div>
+                            <p class="text-base font-bold text-slate-800">Belum Ada Riwayat Gaji</p>
+                            <p class="text-sm text-slate-500 mt-1 max-w-xs text-center">Slip gaji Anda akan otomatis muncul di sini setelah Admin memproses Payroll.</p>
+                        </div>
+                    @endif
+                </div>
+
+            </div>
         </div>
     </div>
     @endif
@@ -360,7 +498,7 @@
         if (!d || !t) return;
         const now = new Date();
         d.textContent = now.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-        t.textContent = now.toLocaleTimeString('id-ID');
+        t.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
     updateClock();
     setInterval(updateClock, 1000);

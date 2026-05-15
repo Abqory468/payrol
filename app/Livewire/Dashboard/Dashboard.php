@@ -11,22 +11,9 @@ use Carbon\Carbon;
 
 class Dashboard extends Component
 {
-    public function absenMasuk()
-    {
-        $user = Auth::user();
-        if ($user->role !== 'user' || !$user->employee) {
-            return;
-        }
+    // const LATE_THRESHOLD is mapped to '08:30' directly in view or logic.
+    // AbsenMasuk dipindah penuh ke AttendanceManager.php
 
-        Attendance::firstOrCreate([
-            'employee_id' => $user->employee->id,
-            'date'        => date('Y-m-d'),
-        ], [
-            'status' => 'hadir',
-        ]);
-
-        session()->flash('success', 'Berhasil Absen Masuk hari ini!');
-    }
 
     public function render()
     {
@@ -102,10 +89,11 @@ class Dashboard extends Component
         }
 
         return view('livewire.dashboard.dashboard', [
-            'isAdmin'    => false,
-            'employee'   => $employee,
-            'sudahAbsen' => $sudahAbsen,
-            'payrolls'   => $payrolls,
+            'isAdmin'       => false,
+            'employee'      => $employee,
+            'sudahAbsen'    => $sudahAbsen,
+            'payrolls'      => $payrolls,
+            'lateThreshold' => '08:30',
         ])->layout('layouts.app');
     }
 }
